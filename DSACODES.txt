@@ -1,3 +1,45 @@
+1) Write a c++ code for implementation of stack push and pop operation.43
+
+2) Write a c++ code for balanced parentheses.131
+
+3) Write a c++ code for implementing queue using two stacks.185
+
+4) Write a c++ code for implementing queue front and rear operation.292
+
+5) Write a c++ code for counting total number of nodes in linked list.411
+
+6) Write a c++ code for finding cycle in the linked list.501
+
+7) Write a c++ code for reversing linked list.630
+
+8) Write a c++ code for implementing bubble sort.731
+
+9) Write a c++ code for implementing selection sort.774
+
+10) Write a c++ code for implementing insertion sort.823
+
+11) Write a c++ code for implementing quick sort.870
+
+12) Write a c++ code for implementing merge sort.930
+
+13) Write a c++ code for implementing linear search.1025
+
+14) Write a c++ code for implementing binary search.1073
+
+15) Write a c++ code for finding height of the BST.1134
+
+16) Write a c++ code for counting total number of nodes in BST.1202
+
+17) Write a c++ code for implementing BFS.1269
+
+18) Write a c++ code for implementing DFS.1355
+
+19) Write a c++ code for implementing graph adjacency list and adjacency matrix.1427
+
+20) Write a c++ code to implement hash table.1528
+
+
+
 1)Write a c++ code for implementation of stack push and pop
 operation.
 
