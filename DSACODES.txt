@@ -1,0 +1,1587 @@
+1)Write a c++ code for implementation of stack push and pop
+operation.
+
+Ans: #include <iostream>
+using namespace std;
+
+#deﬁne MAX 5 // Maximum size of the stack
+
+class Stack {
+private:
+int arr[MAX];
+int top;
+
+public:
+Stack() { top = -1; } // Constructor to initialize stack
+
+// Check if stack is full
+bool isFull() {
+return top == MAX - 1;
+}
+
+// Check if stack is empty
+bool isEmpty() {
+return top == -1;
+}
+
+// Push operation
+void push(int value) {
+if (isFull()) {
+cout << "Stack Overﬂow! Cannot push " << value << endl;
+
+} else {
+arr[++top] = value;
+cout << value << " pushed onto stack" << endl;
+}
+}
+
+// Pop operation
+void pop() {
+if (isEmpty()) {
+cout << "Stack Underﬂow! Cannot pop" << endl;
+} else {
+cout << arr[top--] << " popped from stack" << endl;
+}
+}
+
+// Peek operation (view the top element)
+int peek() {
+if (isEmpty()) {
+cout << "Stack is empty!" << endl;
+return -1;
+} else {
+return arr[top];
+}
+}
+
+// Display the stack
+void display() {
+if (isEmpty()) {
+cout << "Stack is empty!" << endl;
+} else {
+
+cout << "Stack elements: ";
+for (int i = top; i >= 0; i--) {
+cout << arr[i] << " ";
+}
+cout << endl;
+}
+}
+};
+
+int main() {
+Stack s;
+
+s.push(10);
+s.push(20);
+s.push(30);
+
+s.display();
+
+s.pop();
+s.display();
+
+cout << "Top element is: " << s.peek() << endl;
+
+return 0;
+}
+
+2)Write a c++ code for balanced parentheses.
+Ans: #include <iostream>
+
+#include <stack>
+#include <string>
+using namespace std;
+
+bool isBalanced(string str) {
+stack<char> s;
+
+// Traverse the string
+for (char ch : str) {
+// If the character is an opening bracket, push it onto the stack
+if (ch == '(' || ch == '{' || ch == '[') {
+s.push(ch);
+}
+// If the character is a closing bracket
+else if (ch == ')' || ch == '}' || ch == ']') {
+// If the stack is empty or top element doesn't match the
+current closing bracket
+if (s.empty()) {
+return false;
+}
+char top = s.top();
+s.pop();
+
+// Check for matching pair
+if ((ch == ')' && top != '(') || (ch == '}' && top != '{') || (ch == ']' &&
+top != '[')) {
+return false;
+}
+}
+}
+
+// If the stack is empty at the end, the parentheses are balanced
+return s.empty();
+}
+
+int main() {
+string expr;
+
+cout << "Enter an expression with parentheses: ";
+cin >> expr;
+
+if (isBalanced(expr)) {
+cout << "The expression has balanced parentheses." << endl;
+} else {
+cout << "The expression does not have balanced parentheses."
+<< endl;
+}
+
+return 0;
+}
+
+3)Write a c++ code for implementing queue using two stacks.
+Ans: #include <iostream>
+#include <stack>
+using namespace std;
+
+class QueueUsingTwoStacks {
+private:
+stack<int> stack1; // Stack to handle enqueue operations
+stack<int> stack2; // Stack to handle dequeue operations
+
+public:
+// Enqueue operation: Add element to the queue
+void enqueue(int x) {
+stack1.push(x);
+cout << x << " enqueued to the queue" << endl;
+}
+
+// Dequeue operation: Remove element from the queue
+void dequeue() {
+if (stack2.empty()) {
+// Transfer elements from stack1 to stack2 if stack2 is empty
+if (stack1.empty()) {
+cout << "Queue is empty!" << endl;
+return;
+}
+
+while (!stack1.empty()) {
+stack2.push(stack1.top());
+stack1.pop();
+}
+}
+
+// If stack2 has elements, pop from stack2
+if (!stack2.empty()) {
+cout << stack2.top() << " dequeued from the queue" << endl;
+stack2.pop();
+}
+}
+
+// Peek operation: View the front element of the queue
+int peek() {
+if (stack2.empty()) {
+// Transfer elements from stack1 to stack2 if stack2 is empty
+if (stack1.empty()) {
+cout << "Queue is empty!" << endl;
+return -1;
+}
+
+while (!stack1.empty()) {
+stack2.push(stack1.top());
+stack1.pop();
+}
+}
+
+// Return the front element from stack2
+return stack2.top();
+}
+
+// Display the queue elements
+void display() {
+if (stack1.empty() && stack2.empty()) {
+cout << "Queue is empty!" << endl;
+return;
+}
+
+cout << "Queue elements: ";
+
+// Display elements from stack2
+while (!stack2.empty()) {
+
+cout << stack2.top() << " ";
+stack2.pop();
+}
+
+// Display elements from stack1
+stack<int> temp = stack1; // Temporary stack to hold stack1
+elements for displaying
+while (!temp.empty()) {
+cout << temp.top() << " ";
+temp.pop();
+}
+
+cout << endl;
+}
+};
+
+int main() {
+QueueUsingTwoStacks q;
+
+q.enqueue(10);
+q.enqueue(20);
+q.enqueue(30);
+
+q.display();
+
+q.dequeue();
+q.display();
+
+cout << "Front element is: " << q.peek() << endl;
+
+q.dequeue();
+q.dequeue();
+q.dequeue(); // Attempt to dequeue from empty queue
+
+return 0;
+}
+
+4)Write a c++ code for implementing queue front and rear operation.
+
+Ans: #include <iostream>
+using namespace std;
+
+#deﬁne MAX 5 // Deﬁne the maximum size of the queue
+
+class Queue {
+private:
+int arr[MAX];
+int front;
+int rear;
+
+public:
+Queue() {
+front = -1;
+rear = -1;
+}
+
+// Check if the queue is empty
+bool isEmpty() {
+return front == -1;
+}
+
+// Check if the queue is full
+bool isFull() {
+return rear == MAX - 1;
+}
+
+// Enqueue operation: Add an element to the rear of the queue
+void enqueue(int value) {
+if (isFull()) {
+cout << "Queue is full! Cannot enqueue " << value << endl;
+} else {
+if (front == -1) {
+front = 0; // Set front to 0 when the ﬁrst element is added
+}
+arr[++rear] = value;
+cout << value << " enqueued to queue" << endl;
+}
+}
+
+// Dequeue operation: Remove the element from the front of the
+queue
+void dequeue() {
+if (isEmpty()) {
+cout << "Queue is empty! Cannot dequeue" << endl;
+} else {
+
+cout << arr[front] << " dequeued from queue" << endl;
+if (front == rear) {
+front = rear = -1; // Reset queue when the last element is
+dequeued
+} else {
+front++;
+}
+}
+}
+
+// Front operation: Return the front element of the queue
+int getFront() {
+if (isEmpty()) {
+cout << "Queue is empty!" << endl;
+return -1;
+} else {
+return arr[front];
+}
+}
+
+// Rear operation: Return the rear element of the queue
+int getRear() {
+if (isEmpty()) {
+cout << "Queue is empty!" << endl;
+return -1;
+} else {
+return arr[rear];
+}
+}
+
+// Display the queue elements
+void display() {
+if (isEmpty()) {
+cout << "Queue is empty!" << endl;
+} else {
+cout << "Queue elements: ";
+for (int i = front; i <= rear; i++) {
+cout << arr[i] << " ";
+}
+cout << endl;
+}
+}
+};
+
+int main() {
+Queue q;
+
+q.enqueue(10);
+q.enqueue(20);
+q.enqueue(30);
+q.enqueue(40);
+q.enqueue(50);
+
+q.display(); // Should print: 10 20 30 40 50
+
+cout << "Front element: " << q.getFront() << endl; // Should print:
+10
+cout << "Rear element: " << q.getRear() << endl; // Should print: 50
+
+q.dequeue(); // Should dequeue 10
+
+q.display(); // Should print: 20 30 40 50
+
+cout << "Front element: " << q.getFront() << endl; // Should print:
+20
+cout << "Rear element: " << q.getRear() << endl; // Should print: 50
+
+return 0;
+}
+
+5)Write a c++ code for counting total number of nodes in linked list.
+
+Ans: #include <iostream>
+using namespace std;
+
+// Node structure representing each node in the linked list
+struct Node {
+int data;
+Node* next;
+
+// Constructor to initialize a node
+Node(int value) {
+data = value;
+next = nullptr;
+}
+
+};
+
+class LinkedList {
+private:
+Node* head;
+
+public:
+// Constructor to initialize the linked list
+LinkedList() {
+head = nullptr;
+}
+
+// Function to insert a node at the end of the linked list
+void insert(int value) {
+Node* newNode = new Node(value);
+if (head == nullptr) {
+head = newNode;
+} else {
+Node* temp = head;
+while (temp->next != nullptr) {
+temp = temp->next;
+}
+temp->next = newNode;
+}
+}
+
+// Function to count the total number of nodes in the linked list
+int countNodes() {
+int count = 0;
+Node* temp = head;
+
+while (temp != nullptr) {
+count++;
+temp = temp->next;
+}
+return count;
+}
+
+// Function to display the linked list
+void display() {
+if (head == nullptr) {
+cout << "The list is empty!" << endl;
+return;
+}
+Node* temp = head;
+while (temp != nullptr) {
+cout << temp->data << " ";
+temp = temp->next;
+}
+cout << endl;
+}
+};
+
+int main() {
+LinkedList list;
+
+// Inserting nodes into the linked list
+list.insert(10);
+list.insert(20);
+list.insert(30);
+list.insert(40);
+
+list.insert(50);
+
+// Displaying the linked list
+cout << "Linked List: ";
+list.display();
+
+// Counting and displaying the total number of nodes
+cout << "Total number of nodes: " << list.countNodes() << endl;
+
+return 0;
+}
+
+6)Write a c++ code for ﬁnding cycle in the linked list.
+Ans: #include <iostream>
+using namespace std;
+
+// Node structure representing each node in the linked list
+struct Node {
+int data;
+Node* next;
+
+// Constructor to initialize a node
+Node(int value) {
+data = value;
+next = nullptr;
+}
+};
+
+class LinkedList {
+private:
+Node* head;
+
+public:
+// Constructor to initialize the linked list
+LinkedList() {
+head = nullptr;
+}
+
+// Function to insert a node at the end of the linked list
+void insert(int value) {
+Node* newNode = new Node(value);
+if (head == nullptr) {
+head = newNode;
+} else {
+Node* temp = head;
+while (temp->next != nullptr) {
+temp = temp->next;
+}
+temp->next = newNode;
+}
+}
+
+// Function to create a cycle in the linked list
+void createCycle(int pos) {
+Node* temp = head;
+Node* cycleNode = nullptr;
+int count = 1;
+
+while (temp->next != nullptr) {
+if (count == pos) {
+cycleNode = temp; // Remember the node to form the cycle
+}
+temp = temp->next;
+count++;
+}
+
+// If position is valid, create a cycle by linking the last node to
+the cycleNode
+if (cycleNode != nullptr) {
+temp->next = cycleNode;
+}
+}
+
+// Function to detect a cycle in the linked list using Floyd’s CycleFinding Algorithm
+bool hasCycle() {
+if (head == nullptr) return false;
+
+Node* slow = head;
+Node* fast = head;
+
+while (fast != nullptr && fast->next != nullptr) {
+slow = slow->next;
+
+// Move slow pointer one step
+
+fast = fast->next->next; // Move fast pointer two steps
+
+if (slow == fast) {
+return true;
+}
+
+// Cycle detected
+
+}
+
+return false; // No cycle detected
+}
+
+// Function to display the linked list
+void display() {
+if (head == nullptr) {
+cout << "The list is empty!" << endl;
+return;
+}
+Node* temp = head;
+while (temp != nullptr) {
+cout << temp->data << " ";
+temp = temp->next;
+}
+cout << endl;
+}
+};
+
+int main() {
+LinkedList list;
+
+// Inserting nodes into the linked list
+list.insert(10);
+list.insert(20);
+list.insert(30);
+list.insert(40);
+list.insert(50);
+
+// Displaying the linked list
+cout << "Linked List: ";
+list.display();
+
+// Creating a cycle in the linked list by linking the last node to the
+3rd node
+list.createCycle(3);
+
+// Detecting if there is a cycle
+if (list.hasCycle()) {
+cout << "The linked list contains a cycle!" << endl;
+} else {
+cout << "The linked list does not contain a cycle." << endl;
+}
+
+return 0;
+}
+
+7)Write a c++ code for reversing linked list.
+Ans: #include <iostream>
+using namespace std;
+
+// Node structure representing each node in the linked list
+struct Node {
+int data;
+Node* next;
+
+// Constructor to initialize a node
+
+Node(int value) {
+data = value;
+next = nullptr;
+}
+};
+
+class LinkedList {
+private:
+Node* head;
+
+public:
+// Constructor to initialize the linked list
+LinkedList() {
+head = nullptr;
+}
+
+// Function to insert a node at the end of the linked list
+void insert(int value) {
+Node* newNode = new Node(value);
+if (head == nullptr) {
+head = newNode;
+} else {
+Node* temp = head;
+while (temp->next != nullptr) {
+temp = temp->next;
+}
+temp->next = newNode;
+}
+}
+
+// Function to reverse the linked list
+void reverse() {
+Node* prev = nullptr;
+Node* curr = head;
+Node* next = nullptr;
+
+while (curr != nullptr) {
+next = curr->next; // Save the next node
+curr->next = prev; // Reverse the current node's pointer
+prev = curr;
+
+// Move prev one step forward
+
+curr = next;
+
+// Move curr one step forward
+
+}
+head = prev; // Update the head to the new front of the list
+}
+
+// Function to display the linked list
+void display() {
+if (head == nullptr) {
+cout << "The list is empty!" << endl;
+return;
+}
+Node* temp = head;
+while (temp != nullptr) {
+cout << temp->data << " ";
+temp = temp->next;
+}
+cout << endl;
+}
+};
+
+int main() {
+LinkedList list;
+
+// Inserting nodes into the linked list
+list.insert(10);
+list.insert(20);
+list.insert(30);
+list.insert(40);
+list.insert(50);
+
+// Displaying the linked list before reversal
+cout << "Original Linked List: ";
+list.display();
+
+// Reversing the linked list
+list.reverse();
+
+// Displaying the linked list after reversal
+cout << "Reversed Linked List: ";
+list.display();
+
+return 0;
+}
+
+8)Write a c++ code for implementing bubble sort.
+Ans: #include <iostream>
+using namespace std;
+
+void bubbleSort(int arr[], int n) {
+// Traverse through all array elements
+for (int i = 0; i < n-1; i++) {
+// Last i elements are already sorted
+for (int j = 0; j < n-i-1; j++) {
+// Swap if the element is greater than the next element
+if (arr[j] > arr[j+1]) {
+// Swap arr[j] and arr[j+1]
+int temp = arr[j];
+arr[j] = arr[j+1];
+arr[j+1] = temp;
+}
+}
+}
+}
+
+void displayArray(int arr[], int n) {
+for (int i = 0; i < n; i++) {
+cout << arr[i] << " ";
+
+}
+cout << endl;
+}
+
+int main() {
+int arr[] = {64, 34, 25, 12, 22, 11, 90};
+int n = sizeof(arr)/sizeof(arr[0]);
+
+cout << "Original Array: ";
+displayArray(arr, n);
+
+bubbleSort(arr, n);
+
+cout << "Sorted Array: ";
+displayArray(arr, n);
+
+return 0;
+}
+
+9)Write a c++ code for implementing selection sort.
+Ans: #include <iostream>
+using namespace std;
+
+// Function to perform selection sort
+void selectionSort(int arr[], int n) {
+for (int i = 0; i < n - 1; i++) {
+// Find the minimum element in the unsorted part of the array
+int minIndex = i;
+
+for (int j = i + 1; j < n; j++) {
+if (arr[j] < arr[minIndex]) {
+minIndex = j; // Update the index of the minimum element
+}
+}
+
+// Swap the found minimum element with the ﬁrst element of
+the unsorted part
+if (minIndex != i) {
+int temp = arr[i];
+arr[i] = arr[minIndex];
+arr[minIndex] = temp;
+}
+}
+}
+
+// Function to display the array
+void displayArray(int arr[], int n) {
+for (int i = 0; i < n; i++) {
+cout << arr[i] << " ";
+}
+cout << endl;
+}
+
+int main() {
+int arr[] = {64, 34, 25, 12, 22, 11, 90};
+int n = sizeof(arr) / sizeof(arr[0]);
+
+cout << "Original Array: ";
+displayArray(arr, n);
+
+selectionSort(arr, n);
+
+cout << "Sorted Array: ";
+displayArray(arr, n);
+
+return 0;
+}
+
+10) Write a c++ code for implementing insertion sort.
+
+Ans: #include <iostream>
+using namespace std;
+
+// Function to perform insertion sort
+void insertionSort(int arr[], int n) {
+// Traverse through 1 to n
+for (int i = 1; i < n; i++) {
+int key = arr[i]; // The element to be inserted
+int j = i - 1;
+
+// Move elements of arr[0..i-1] that are greater than key
+// to one position ahead of their current position
+while (j >= 0 && arr[j] > key) {
+arr[j + 1] = arr[j];
+j = j - 1;
+}
+// Insert the key after the sorted portion
+
+arr[j + 1] = key;
+}
+}
+
+// Function to display the array
+void displayArray(int arr[], int n) {
+for (int i = 0; i < n; i++) {
+cout << arr[i] << " ";
+}
+cout << endl;
+}
+
+int main() {
+int arr[] = {64, 34, 25, 12, 22, 11, 90};
+int n = sizeof(arr) / sizeof(arr[0]);
+
+cout << "Original Array: ";
+displayArray(arr, n);
+
+insertionSort(arr, n);
+
+cout << "Sorted Array: ";
+displayArray(arr, n);
+
+return 0;
+}
+
+11) Write a c++ code for implementing quick sort.
+
+Ans: #include <iostream>
+using namespace std;
+
+// Function to partition the array into two parts
+int partition(int arr[], int low, int high) {
+int pivot = arr[high]; // Choosing the last element as the pivot
+int i = low - 1; // Index of the smaller element
+
+// Rearrange elements to have smaller ones on the left of pivot
+and larger ones on the right
+for (int j = low; j <= high - 1; j++) {
+if (arr[j] < pivot) { // If current element is smaller than the pivot
+i++; // Increment the smaller element index
+swap(arr[i], arr[j]); // Swap the elements
+}
+}
+
+// Swap the pivot element with the element at index i+1 so that
+pivot is in the correct position
+swap(arr[i + 1], arr[high]);
+return (i + 1); // Return the index of the pivot element
+}
+
+// Function to perform quick sort recursively
+void quickSort(int arr[], int low, int high) {
+if (low < high) {
+int pi = partition(arr, low, high); // Partitioning index
+
+// Recursively sort the two sub-arrays
+quickSort(arr, low, pi - 1); // Sort the left part
+
+quickSort(arr, pi + 1, high); // Sort the right part
+}
+}
+
+// Function to display the array
+void displayArray(int arr[], int n) {
+for (int i = 0; i < n; i++) {
+cout << arr[i] << " ";
+}
+cout << endl;
+}
+
+int main() {
+int arr[] = {64, 34, 25, 12, 22, 11, 90};
+int n = sizeof(arr) / sizeof(arr[0]);
+
+cout << "Original Array: ";
+displayArray(arr, n);
+
+quickSort(arr, 0, n - 1); // Calling the quick sort function
+
+cout << "Sorted Array: ";
+displayArray(arr, n);
+
+return 0;
+}
+
+Write a c++ code for implementing merge sort.
+
+12)
+
+Ans: #include <iostream>
+using namespace std;
+
+// Function to merge two sub-arrays into a sorted array
+void merge(int arr[], int left, int mid, int right) {
+// Calculate the sizes of the two sub-arrays
+int n1 = mid - left + 1;
+int n2 = right - mid;
+
+// Create temporary arrays to hold the values of the two sub-arrays
+int L[n1], R[n2];
+
+// Copy data to temporary arrays L[] and R[]
+for (int i = 0; i < n1; i++) {
+L[i] = arr[left + i];
+}
+for (int j = 0; j < n2; j++) {
+R[j] = arr[mid + 1 + j];
+}
+
+// Merge the temporary arrays back into the original array
+int i = 0; // Initial index of the ﬁrst sub-array
+int j = 0; // Initial index of the second sub-array
+
+int k = left; // Initial index of the merged sub-array
+
+while (i < n1 && j < n2) {
+if (L[i] <= R[j]) {
+arr[k] = L[i];
+i++;
+} else {
+arr[k] = R[j];
+j++;
+}
+k++;
+}
+
+// Copy any remaining elements of L[] if any
+while (i < n1) {
+arr[k] = L[i];
+i++;
+k++;
+}
+
+// Copy any remaining elements of R[] if any
+while (j < n2) {
+arr[k] = R[j];
+j++;
+k++;
+}
+}
+
+// Function to implement merge sort
+void mergeSort(int arr[], int left, int right) {
+
+if (left < right) {
+// Find the middle point
+int mid = left + (right - left) / 2;
+
+// Recursively sort the ﬁrst and second halves
+mergeSort(arr, left, mid);
+mergeSort(arr, mid + 1, right);
+
+// Merge the sorted halves
+merge(arr, left, mid, right);
+}
+}
+
+// Function to display the array
+void displayArray(int arr[], int n) {
+for (int i = 0; i < n; i++) {
+cout << arr[i] << " ";
+}
+cout << endl;
+}
+
+int main() {
+int arr[] = {64, 34, 25, 12, 22, 11, 90};
+int n = sizeof(arr) / sizeof(arr[0]);
+
+cout << "Original Array: ";
+displayArray(arr, n);
+
+mergeSort(arr, 0, n - 1); // Calling the merge sort function
+
+cout << "Sorted Array: ";
+displayArray(arr, n);
+
+return 0;
+}
+
+Write a c++ code for implementing linear search.
+
+13)
+
+Ans: #include <iostream>
+using namespace std;
+
+// Function to perform linear search
+int linearSearch(int arr[], int n, int key) {
+// Traverse the array to ﬁnd the key
+for (int i = 0; i < n; i++) {
+if (arr[i] == key) {
+return i; // Return the index if the key is found
+}
+}
+return -1; // Return -1 if the key is not found
+}
+
+// Function to display the array
+void displayArray(int arr[], int n) {
+for (int i = 0; i < n; i++) {
+cout << arr[i] << " ";
+}
+cout << endl;
+
+}
+
+int main() {
+int arr[] = {64, 34, 25, 12, 22, 11, 90};
+int n = sizeof(arr) / sizeof(arr[0]);
+int key = 25; // The key to be searched
+
+cout << "Array: ";
+displayArray(arr, n);
+
+// Call linearSearch function
+int result = linearSearch(arr, n, key);
+
+if (result != -1) {
+cout << "Element " << key << " found at index " << result << endl;
+} else {
+cout << "Element " << key << " not found in the array" << endl;
+}
+
+return 0;
+}
+
+14)
+
+Write a c++ code for implementing binary search
+
+Ans: #include <iostream>
+using namespace std;
+
+// Function to perform binary search
+int binarySearch(int arr[], int left, int right, int key) {
+
+while (left <= right) {
+int mid = left + (right - left) / 2; // Find the middle index
+
+// Check if key is present at mid
+if (arr[mid] == key) {
+return mid; // Key found at index mid
+}
+
+// If key is greater, ignore the left half
+if (arr[mid] < key) {
+left = mid + 1;
+}
+// If key is smaller, ignore the right half
+else {
+right = mid - 1;
+}
+}
+
+return -1; // Return -1 if the key is not found
+}
+
+// Function to display the array
+void displayArray(int arr[], int n) {
+for (int i = 0; i < n; i++) {
+cout << arr[i] << " ";
+}
+cout << endl;
+}
+
+int main() {
+
+int arr[] = {11, 12, 22, 25, 34, 64, 90};
+int n = sizeof(arr) / sizeof(arr[0]);
+int key = 25; // The key to be searched
+
+cout << "Array: ";
+displayArray(arr, n);
+
+// Call binarySearch function
+int result = binarySearch(arr, 0, n - 1, key);
+
+if (result != -1) {
+cout << "Element " << key << " found at index " << result << endl;
+} else {
+cout << "Element " << key << " not found in the array" << endl;
+}
+
+return 0;
+}.
+
+15)
+
+Write a c++ code for ﬁnding height of the BST.
+
+Ans: #include <iostream>
+using namespace std;
+
+// Deﬁnition for a Binary Tree node
+struct Node {
+int data;
+Node* left;
+Node* right;
+
+Node(int value) {
+data = value;
+left = right = nullptr;
+}
+};
+
+// Function to ﬁnd the height of the BST
+int height(Node* root) {
+// Base case: If the tree is empty, return -1
+if (root == nullptr) {
+return -1;
+}
+
+// Recursively ﬁnd the height of the left and right subtrees
+int leftHeight = height(root->left);
+int rightHeight = height(root->right);
+
+// The height of the current node is the maximum of the heights
+of its left and right subtrees, plus 1
+return max(leftHeight, rightHeight) + 1;
+}
+
+// Function to insert a new node in the BST
+Node* insert(Node* root, int value) {
+// If the tree is empty, return a new node
+if (root == nullptr) {
+return new Node(value);
+}
+
+// Otherwise, recur down the tree
+if (value < root->data) {
+root->left = insert(root->left, value);
+} else {
+root->right = insert(root->right, value);
+}
+
+return root;
+}
+
+int main() {
+Node* root = nullptr;
+
+// Insert nodes into the BST
+root = insert(root, 50);
+root = insert(root, 30);
+root = insert(root, 20);
+root = insert(root, 40);
+root = insert(root, 70);
+root = insert(root, 60);
+root = insert(root, 80);
+
+// Find and print the height of the BST
+cout << "Height of the BST: " << height(root) << endl;
+
+return 0;
+}
+
+16) Write a c++ code for counting total number of nodes in
+BST.
+Ans: #include <iostream>
+using namespace std;
+
+// Deﬁnition for a Binary Tree node
+struct Node {
+int data;
+Node* left;
+Node* right;
+
+Node(int value) {
+data = value;
+left = right = nullptr;
+}
+};
+
+// Function to count the total number of nodes in the BST
+int countNodes(Node* root) {
+// Base case: If the tree is empty, return 0
+if (root == nullptr) {
+return 0;
+}
+
+// Recursively count nodes in the left and right subtrees, then add
+1 for the current node
+return 1 + countNodes(root->left) + countNodes(root->right);
+}
+
+// Function to insert a new node in the BST
+
+Node* insert(Node* root, int value) {
+// If the tree is empty, return a new node
+if (root == nullptr) {
+return new Node(value);
+}
+
+// Otherwise, recur down the tree
+if (value < root->data) {
+root->left = insert(root->left, value);
+} else {
+root->right = insert(root->right, value);
+}
+
+return root;
+}
+
+int main() {
+Node* root = nullptr;
+
+// Insert nodes into the BST
+root = insert(root, 50);
+root = insert(root, 30);
+root = insert(root, 20);
+root = insert(root, 40);
+root = insert(root, 70);
+root = insert(root, 60);
+root = insert(root, 80);
+
+// Find and print the total number of nodes in the BST
+cout << "Total number of nodes in the BST: " << countNodes(root)
+
+<< endl;
+
+return 0;
+}
+
+Write a c++ code for implementing BFS.
+
+17)
+
+Ans: #include <iostream>
+#include <queue>
+using namespace std;
+
+// Deﬁnition for a Binary Tree node
+struct Node {
+int data;
+Node* left;
+Node* right;
+
+Node(int value) {
+data = value;
+left = right = nullptr;
+}
+};
+
+// Function to perform BFS (Level Order Traversal)
+void bfs(Node* root) {
+// If the tree is empty, return
+if (root == nullptr) {
+cout << "Tree is empty." << endl;
+return;
+
+}
+
+// Create a queue to store the nodes for BFS
+queue<Node*> q;
+q.push(root);
+
+while (!q.empty()) {
+// Get the front node from the queue
+Node* current = q.front();
+q.pop();
+
+// Print the current node's data
+cout << current->data << " ";
+
+// Add the left and right children to the queue
+if (current->left != nullptr) {
+q.push(current->left);
+}
+if (current->right != nullptr) {
+q.push(current->right);
+}
+}
+}
+
+// Function to insert a new node in the BST
+Node* insert(Node* root, int value) {
+// If the tree is empty, return a new node
+if (root == nullptr) {
+return new Node(value);
+}
+
+// Otherwise, recur down the tree
+if (value < root->data) {
+root->left = insert(root->left, value);
+} else {
+root->right = insert(root->right, value);
+}
+
+return root;
+}
+
+int main() {
+Node* root = nullptr;
+
+// Insert nodes into the BST
+root = insert(root, 50);
+root = insert(root, 30);
+root = insert(root, 20);
+root = insert(root, 40);
+root = insert(root, 70);
+root = insert(root, 60);
+root = insert(root, 80);
+
+cout << "BFS (Level Order Traversal) of the BST: ";
+bfs(root);
+
+return 0;
+}
+
+Write a c++ code for implementing DFS.
+
+18)
+
+Ans: #include <iostream>
+using namespace std;
+
+// Deﬁnition for a Binary Tree node
+struct Node {
+int data;
+Node* left;
+Node* right;
+
+Node(int value) {
+data = value;
+left = right = nullptr;
+}
+};
+
+// Function for Preorder DFS (Root, Left, Right)
+void dfsPreorder(Node* root) {
+// Base case: If the tree is empty, return
+if (root == nullptr) {
+return;
+}
+
+// Visit the root node ﬁrst
+cout << root->data << " ";
+
+// Recursively traverse the left subtree
+dfsPreorder(root->left);
+
+// Recursively traverse the right subtree
+dfsPreorder(root->right);
+}
+
+// Function to insert a new node in the BST
+Node* insert(Node* root, int value) {
+// If the tree is empty, return a new node
+if (root == nullptr) {
+return new Node(value);
+}
+
+// Otherwise, recur down the tree
+if (value < root->data) {
+root->left = insert(root->left, value);
+} else {
+root->right = insert(root->right, value);
+}
+
+return root;
+}
+
+int main() {
+Node* root = nullptr;
+
+// Insert nodes into the BST
+root = insert(root, 50);
+root = insert(root, 30);
+root = insert(root, 20);
+root = insert(root, 40);
+root = insert(root, 70);
+
+root = insert(root, 60);
+root = insert(root, 80);
+
+cout << "DFS (Preorder) Traversal of the BST: ";
+dfsPreorder(root);
+
+return 0;
+}
+
+19) Write a c++ code for implementing graph adjacency list
+and adjacency matrix.
+Ans: #include <iostream>
+#include <vector>
+using namespace std;
+
+// --- Adjacency List Representation ---
+class GraphAdjList {
+public:
+vector<vector<int>> adjList;
+
+// Constructor to initialize the graph with a given number of
+vertices
+
+GraphAdjList(int vertices) {
+adjList.resize(vertices);
+}
+
+// Function to add an edge to the graph (directed)
+void addEdge(int u, int v) {
+adjList[u].push_back(v);
+}
+
+// Function to display the graph using adjacency list
+void displayAdjList() {
+for (int i = 0; i < adjList.size(); ++i) {
+cout << "Vertex " << i << ": ";
+for (int j : adjList[i]) {
+cout << j << " ";
+}
+cout << endl;
+}
+}
+};
+
+// --- Adjacency Matrix Representation ---
+class GraphAdjMatrix {
+public:
+vector<vector<int>> adjMatrix;
+
+// Constructor to initialize the graph with a given number of
+vertices
+GraphAdjMatrix(int vertices) {
+adjMatrix.resize(vertices, vector<int>(vertices, 0)); // Initialize
+
+with 0
+}
+
+// Function to add an edge to the graph (directed)
+void addEdge(int u, int v) {
+adjMatrix[u][v] = 1;
+}
+
+// Function to display the graph using adjacency matrix
+void displayAdjMatrix() {
+for (int i = 0; i < adjMatrix.size(); ++i) {
+for (int j = 0; j < adjMatrix[i].size(); ++j) {
+cout << adjMatrix[i][j] << " ";
+}
+cout << endl;
+}
+}
+};
+
+int main() {
+int vertices = 5;
+
+// --- Adjacency List Example ---
+cout << "Graph using Adjacency List: \n";
+GraphAdjList graphList(vertices);
+
+// Add edges
+graphList.addEdge(0, 1);
+graphList.addEdge(0, 4);
+graphList.addEdge(1, 2);
+
+graphList.addEdge(1, 3);
+graphList.addEdge(1, 4);
+graphList.addEdge(3, 4);
+
+// Display the graph
+graphList.displayAdjList();
+
+// --- Adjacency Matrix Example ---
+cout << "\nGraph using Adjacency Matrix: \n";
+GraphAdjMatrix graphMatrix(vertices);
+
+// Add edges
+graphMatrix.addEdge(0, 1);
+graphMatrix.addEdge(0, 4);
+graphMatrix.addEdge(1, 2);
+graphMatrix.addEdge(1, 3);
+graphMatrix.addEdge(1, 4);
+graphMatrix.addEdge(3, 4);
+
+// Display the graph
+graphMatrix.displayAdjMatrix();
+
+return 0;
+}
+
+20)
+
+Write a c++ code to implement hash table.
+
+Ans: #include <iostream>
+#include <list>
+
+#include <iterator>
+using namespace std;
+
+// HashTable class deﬁnition
+class HashTable {
+private:
+// Number of slots in hash table
+int size;
+
+// Array of linked lists to handle collisions
+list<int>* table;
+
+// Hash function to compute hash values for keys
+int hashFunction(int key) {
+return key % size;
+}
+
+public:
+// Constructor to initialize hash table with given size
+HashTable(int s) {
+size = s;
+table = new list<int>[size];
+}
+
+// Insert key into the hash table
+void insert(int key) {
+int index = hashFunction(key);
+table[index].push_back(key);
+}
+
+// Search for a key in the hash table
+bool search(int key) {
+int index = hashFunction(key);
+for (int x : table[index]) {
+if (x == key) {
+return true;
+}
+}
+return false;
+}
+
+// Remove a key from the hash table
+void remove(int key) {
+int index = hashFunction(key);
+table[index].remove(key);
+}
+
+// Display the hash table
+void display() {
+for (int i = 0; i < size; i++) {
+cout << "Slot " << i << ": ";
+for (int x : table[i]) {
+cout << x << " ";
+}
+cout << endl;
+}
+}
+
+// Destructor to free the dynamically allocated memory
+~HashTable() {
+
+delete[] table;
+}
+};
+
+int main() {
+// Create a hash table of size 10
+HashTable hashTable(10);
+
+// Insert keys into the hash table
+hashTable.insert(20);
+hashTable.insert(25);
+hashTable.insert(35);
+hashTable.insert(45);
+hashTable.insert(55);
+
+// Display the hash table
+cout << "Hash Table after insertions:" << endl;
+hashTable.display();
+
+// Search for keys
+cout << "\nSearching for 25: " << (hashTable.search(25) ?
+"Found" : "Not Found") << endl;
+cout << "Searching for 100: " << (hashTable.search(100) ?
+"Found" : "Not Found") << endl;
+
+// Remove a key from the hash table
+hashTable.remove(25);
+cout << "\nHash Table after removing 25:" << endl;
+hashTable.display();
+
+return 0;
+}
+
+
